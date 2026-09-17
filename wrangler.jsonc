@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "openai-mock-worker",
   "main": "src/index.ts",
+  "routes": [
+    { "pattern": "ai-demo.zpad.app", "custom_domain": true }
+  ],
   "compatibility_date": "2026-09-17",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
