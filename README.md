@@ -8,7 +8,7 @@ OpenAI 兼容的 Mock API，部署在 Cloudflare Workers 上。所有响应都�
 |---|---|---|
 | GET | `/v1/models` | 模型列表（gpt-5 / gpt-4.1 / gpt-4o / o3 / embedding 等 10 个） |
 | GET | `/v1/models/{id}` | 模型详情，不存在返回 404（`model_not_found`） |
-| POST | `/v1/chat/completions` | Chat 补全：支持 `stream`、`tools`（返回 mock `tool_calls`）、`stream_options.include_usage`、`n` |
+| POST | `/v1/chat/completions` | Chat 补全：50 条随机回复池（中英混合、多种 Markdown 格式），支持 `stream`、`tools`（返回 mock `tool_calls`）、`stream_options.include_usage`、`n` |
 | POST | `/v1/completions` | 传统文本补全（支持 `stream`） |
 | POST | `/v1/embeddings` | 向量：**确定性 mock**（同输入 → 同向量），支持 `dimensions` |
 
@@ -84,6 +84,7 @@ src/
   index.ts        # 路由 + CORS + 错误兜底
   util.ts         # JSON/SSE 响应、OpenAI 错误格式、id/usage 工具
   mock-data.ts    # 模型列表、mock 回复与 tool 参数生成器
+  replies.ts      # 50 条随机回复池
   models.ts       # GET /v1/models[/id]
   chat.ts         # POST /v1/chat/completions
   completions.ts  # POST /v1/completions

@@ -1,4 +1,6 @@
-/** Static mock data and deterministic mock-content generators. */
+/** Static mock data and mock-content generators. */
+
+import { REPLIES } from "./replies";
 
 export interface MockModel {
   id: string;
@@ -27,21 +29,12 @@ export const MODELS: MockModel[] = [
   owned_by: id.startsWith("text-embedding") ? "openai" : "system",
 }));
 
-/** Deterministic markdown reply that echoes the last user message. */
+/** Pick one of the 50 canned replies at random, splicing in the question. */
 export function mockAssistantReply(question: string): string {
-  const q = question.trim().slice(0, 120) || "(empty message)";
-  return [
-    `You said: "${q}".`,
-    "",
-    "This is a **mocked** completion from `openai-mock-worker` — no real model was called.",
-    "",
-    "What this reply demonstrates:",
-    "1. Multi-line markdown output",
-    "2. Simulated streaming over SSE",
-    "3. Token `usage` accounting",
-    "",
-    "Point any OpenAI SDK at this server's `/v1` endpoint to exercise your integration end to end.",
-  ].join("\n");
+  const random = new Uint32Array(1);
+  crypto.getRandomValues(random);
+  const template = REPLIES[random[0] % REPLIES.length];
+  return template.replaceAll("{question}", question.trim().slice(0, 120) || "(empty message)");
 }
 
 /**
